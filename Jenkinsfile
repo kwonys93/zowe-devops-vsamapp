@@ -50,7 +50,25 @@ pipeline {
         stage('Disable-Pipeline') {
             steps {
                 echo 'Disabling Pipeline for Web service..'
+                sh 'gulp --tasks'
                 sh 'gulp disable-Pipeline'
+            
+            }
+        }
+        stage('Discard-Pipeline') {
+            steps {
+                echo 'Removing Pipeline for Web service..'
+                sh 'gulp --tasks'
+                sh 'gulp discard-Pipeline'
+            
+            }
+        }
+        stage('Install-Pipeline') {
+            steps {
+                echo 'Disabling Pipeline for Web service..'
+                sh 'gulp --tasks'
+                sh 'gulp install-Pipeline'
+            
             }
         }
  /*       stage('Copy-dbrm') {

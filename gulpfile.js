@@ -96,7 +96,31 @@ gulp.task("disable-pipeline", function(callback) {
     config.cicsPipeline +
     ') DIS"';
 
-  simpleCommand(command, "command-archive/disable-Pipeline", callback);
+  simpleCommand(command, "command-archive/disable-pipeline", callback);
+});
+
+gulp.task("discard-pipeline", function(callback) {
+  var command =
+    'zowe console issue command "F ' +
+    config.cicsRegion +
+    ",CEMT DISCARD PIP(" +
+    config.cicsPipeline +
+    ')"';
+
+  simpleCommand(command, "command-archive/discard-pipeline", callback);
+});
+
+gulp.task("install-pipeline", function(callback) {
+  var command =
+    'zowe console issue command "F ' +
+    config.cicsRegion +
+    ",CEDA I PIP(" +
+    config.cicsPipeline +
+    ") G(" +
+    config.cicsGroup +
+    ')"';
+
+  simpleCommand(command, "command-archive/install-pipeline", callback);
 });
 
 gulp.task(
