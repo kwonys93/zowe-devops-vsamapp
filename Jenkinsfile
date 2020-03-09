@@ -49,25 +49,22 @@ pipeline {
         }
         stage('Disable-Pipeline') {
             steps {
-                echo 'Disabling Pipeline for Web service..'
-                sh 'gulp --tasks'
-                sh 'gulp disable-Pipeline'
+                echo 'Disabling pipeline for Web service..'
+                sh 'gulp disable-pipeline'
             
             }
         }
         stage('Discard-Pipeline') {
             steps {
-                echo 'Removing Pipeline for Web service..'
-                sh 'gulp --tasks'
-                sh 'gulp discard-Pipeline'
+                echo 'Removing pipeline for Web service..'
+                sh 'gulp discard-pipeline'
             
             }
         }
         stage('Install-Pipeline') {
             steps {
-                echo 'Disabling Pipeline for Web service..'
-                sh 'gulp --tasks'
-                sh 'gulp install-Pipeline'
+                echo 'Installing pipeline for Web service..'
+                sh 'gulp install-pipeline'
             
             }
         }
