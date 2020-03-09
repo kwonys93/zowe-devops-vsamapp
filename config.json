@@ -7,6 +7,8 @@
   "cicsProtocol": "http",
   "cicsRegion": "CICS00A1",
   "cicsTran": "MB01",
+  "cicsPipeline": "NJPIPE01",
+  "cicsGroup": "YSKGRP",
   "db2Database": "THISLOCN",
   "db2Port": 447,
   "devDBRMLIB": "PRODUCT.NDVR.MARBLES.MARBLES.D1.DBRMLIB",

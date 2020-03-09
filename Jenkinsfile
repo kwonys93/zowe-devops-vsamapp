@@ -41,13 +41,18 @@ pipeline {
                 sh 'gulp build-lnk'
             }
         }
-      stage('Copy-load') {
+        stage('Copy-load') {
             steps {
                 echo 'Copying module to CICS env..'
                 sh 'gulp copy-load'
             }
         }
-
+        stage('Disable-Pipeline') {
+            steps {
+                echo 'Disabling Pipeline for Web service..'
+                sh 'gulp disable-Pipeline'
+            }
+        }
  /*       stage('Copy-dbrm') {
             steps {
                 echo 'Copying dbrm to db2..'

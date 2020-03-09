@@ -88,6 +88,17 @@ gulp.task("copy-load", function(callback) {
   simpleCommand(command, "command-archive/copy-load", callback);
 });
 
+gulp.task("disable-pipeline", function(callback) {
+  var command =
+    'zowe console issue command "F ' +
+    config.cicsRegion +
+    ",CEMT S PIP(" +
+    config.cicsPipeline +
+    ') DIS"';
+
+  simpleCommand(command, "command-archive/disable-Pipeline", callback);
+});
+
 gulp.task(
   "deploy",
   gulpSequence("copy-dbrm", "copy-load", "bind-n-grant", "cics-refresh")
