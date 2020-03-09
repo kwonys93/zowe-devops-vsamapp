@@ -41,31 +41,34 @@ pipeline {
                 sh 'gulp build-lnk'
             }
         }
-/*      stage('Copy-load') {
+      stage('Copy-load') {
             steps {
                 echo 'Copying module to CICS env..'
                 sh 'gulp copy-load'
             }
         }
-*/
-        stage('Copy-dbrm') {
+
+ /*       stage('Copy-dbrm') {
             steps {
                 echo 'Copying dbrm to db2..'
                 sh 'gulp copy-dbrm'
             }
         }
+        */
+
         stage('CICS-refresh') {
             steps {
                 echo 'New copying module in CICS..'
                 sh 'gulp cics-refresh'
             }
         }
-        stage('Bind-n-grant') {
+/*      stage('Bind-n-grant') {
             steps {
                 echo 'Binding db2 plan and granting..'
                 sh 'gulp bind-n-grant'
             }
         }
+        */
         stage('Test-data') {
             steps {
                 echo 'Testing data..'
