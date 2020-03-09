@@ -1,0 +1,20 @@
+{
+    "endevor.hosts": [
+        {
+            "datasource": "ENDEVOR",
+            "filters": [],
+            "id": 0,
+            "name": "ENDEVOR-de42",
+            "url": "http://mvsde42.lvn.broadcom.net:10443",
+            "username": "kwoyo01"
+        },
+        {
+            "datasource": "ENDEVOR",
+            "filters": [],
+            "id": 1,
+            "name": "ENDEVOR-SR01",
+            "url": "http://10.175.80.65:6002",
+            "username": "CUST001"
+        }
+    ]
+}
