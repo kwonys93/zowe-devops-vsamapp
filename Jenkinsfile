@@ -29,17 +29,20 @@ pipeline {
                 sh 'gulp update-cobol'
             }
         }
-        stage('Build-cobol') {
-            steps {
-                echo 'Building cobol..'
+        stage('BUILD') {
+          steps {
+            parallel (
+                "Build-cobol": { 
+                echo 'Generating cobol..'
                 sh 'gulp build-cobol'
-            }
-        }
-        stage('Build-lnk') {
-            steps {
-                echo 'Building module to CICS..'
-                sh 'gulp build-lnk'
-            }
+             },
+
+             "Build-lnk": { 
+                echo 'Generating lnk..'
+                sh "gulp build-lnk"
+             },
+            )
+          }
         }
         stage('Copy-load') {
             steps {
