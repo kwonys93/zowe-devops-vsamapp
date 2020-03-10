@@ -47,6 +47,21 @@ gulp.task("bind-n-grant", function(callback) {
   submitJobAndDownloadOutput(ds, "job-archive/bind-n-grant", 4, callback);
 });
 
+gulp.task("convert-to-json1", function(callback) {
+  var ds = config.convert1JCL;
+  submitJobAndDownloadOutput(ds, "job-archive/convert-to-json1", 4, callback);
+});
+
+gulp.task("convert-to-json2", function(callback) {
+  var ds = config.convert2JCL;
+  submitJobAndDownloadOutput(ds, "job-archive/convert-to-json2", 4, callback);
+});
+
+gulp.task("convert-to-json3", function(callback) {
+  var ds = config.convert3JCL;
+  submitJobAndDownloadOutput(ds, "job-archive/convert-to-json3", 4, callback);
+});
+
 gulp.task("test-data", function(callback) {
   var ds = config.sqlJCL;
   submitJobAndDownloadOutput(ds, "job-archive/test-data", 4, callback);

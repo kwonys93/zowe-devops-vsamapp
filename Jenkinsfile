@@ -44,6 +44,24 @@ pipeline {
             )
           }
         }
+        stage('CONVERT to JSON') {
+          steps {
+            parallel (
+             "Converting copy1": { 
+                echo 'Converting copybook1 to json1..'
+                sh 'gulp convert-to-json1'
+             },
+             "Converting copy2": { 
+                echo 'Converting copybook2 to json2..'
+                sh "gulp convert-to-json2"
+             },
+             "Converting copy3": { 
+                echo 'Converting copybook3 to json3..'
+                sh "gulp convert-to-json2"
+             },
+            )
+          }
+        }
         stage('Copy-load') {
             steps {
                 echo 'Copying module to CICS env..'

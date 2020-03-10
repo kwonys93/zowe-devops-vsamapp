@@ -33,12 +33,12 @@ pipeline {
      /*        
              "Build-cobol": { 
                 echo 'Generating cobol..'
-                sh 'build-cobol'
+                sh 'gulp build-cobol'
              },
       */
              "Build-lnk": { 
                 echo 'Generating lnk..'
-                sh "build-lnk"
+                sh "gulp build-lnk"
              },
             )
           }
