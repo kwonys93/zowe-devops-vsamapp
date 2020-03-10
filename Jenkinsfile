@@ -44,7 +44,7 @@ pipeline {
             )
           }
         }
-        stage('CONVERT to JSON') {
+        stage('CONVERT') {
           steps {
             parallel (
              "Converting copy1": { 
