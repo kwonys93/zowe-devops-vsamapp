@@ -57,7 +57,7 @@ pipeline {
              },
              "Converting copy3": { 
                 echo 'Converting copybook3 to json3..'
-                sh "gulp convert-to-json2"
+                sh "gulp convert-to-json3"
              },
             )
           }
