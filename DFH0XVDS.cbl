@@ -182,7 +182,7 @@
 
                WHEN '01INQS'
       *        Call routine to perform for inquire for single item
-      *           PERFORM CATALOG-INQUIRE-SINGLE
+                 PERFORM CATALOG-INQUIRE-SINGLE
 
                WHEN '01ORDR'
       *        Call routine to place order
