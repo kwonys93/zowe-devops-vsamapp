@@ -17,7 +17,7 @@ gulp.task("task", function(cb) {
 gulp.task("update-cobol", function(callback) {
   //   var command = "zowe endevor generate element " + config.testElement + " --type COBOL --override-signout --maxrc 0 --stage-number 1";
   var command =
-    "zowe  endevor update element DFH0XVDS --env SMPLTEST --sys MARBLES --sub MARBLES --typ COBOL --override-signout --ff DFH0XVDS.cbl -i ENDEVOR --comment ysk2 --ccid ysk2";
+    "zowe  endevor update element DFH0XVDS --env SMPLTEST --sys MARBLES --sub MARBLES --typ COBOL --override-signout --ff DFH0XVDS.cbl -i ENDEVOR --comment ysk1 --ccid ysk1";
 
   simpleCommand(command, "command-archive/update-cobol", callback);
 });
@@ -38,7 +38,7 @@ gulp.task("build-cobol", function(callback) {
 gulp.task("build-lnk", function(callback) {
   //  var command = "zowe endevor generate element " + config.testElement + " --type LNK --override-signout --maxrc 0 --stage-number 1";
   var command =
-    "zowe endevor generate element DFH0XVDS --env SMPLTEST --sn 1 --sys MARBLES --sub MARBLES --type LNK --override-signout --cb -i ENDEVOR --comment ysk2 --ccid ysk2 --os";
+    "zowe endevor generate element DFH0XVDS --env SMPLTEST --sn 1 --sys MARBLES --sub MARBLES --type LNK --override-signout --cb -i ENDEVOR --comment ysk3 --ccid ysk3";
   simpleCommand(command, "command-archive/build-lnk", callback);
 });
 
