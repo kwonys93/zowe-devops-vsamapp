@@ -172,6 +172,9 @@
       *----------------------------------------------------------------*
       * Check which operation in being requested
       *----------------------------------------------------------------*
+      *----------------------------------------------------------------*
+      *----------------------------------------------------------------*
+      *----------------------------------------------------------------*
       * Uppercase the value passed in the Request Id field
            MOVE FUNCTION UPPER-CASE(CA-REQUEST-ID) TO CA-REQUEST-ID
 
@@ -182,7 +185,7 @@
 
                WHEN '01INQS'
       *        Call routine to perform for inquire for single item
-      *           PERFORM CATALOG-INQUIRE-SINGLE
+                 PERFORM CATALOG-INQUIRE-SINGLE
 
                WHEN '01ORDR'
       *        Call routine to place order
