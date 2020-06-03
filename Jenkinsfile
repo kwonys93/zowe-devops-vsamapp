@@ -63,13 +63,14 @@ pipeline {
           }
         }
         
-        /*
+        
         stage('Copy-load') {
             steps {
                 echo 'Copying module to CICS env..'
                 sh 'gulp copy-load'
             }
         }
+        /*
         */
 
         stage('Disable-Pipeline') {
