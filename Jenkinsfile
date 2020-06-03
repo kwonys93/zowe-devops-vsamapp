@@ -70,9 +70,7 @@ pipeline {
                 sh 'gulp copy-load'
             }
         }
-         /*
-        */
-
+        
         stage('Disable-Pipeline') {
             steps {
                 echo 'Disabling pipeline for Web service..'
