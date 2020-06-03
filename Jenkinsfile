@@ -70,7 +70,7 @@ pipeline {
                 sh 'gulp copy-load'
             }
         }
-        /*
+         /*
         */
 
         stage('Disable-Pipeline') {
