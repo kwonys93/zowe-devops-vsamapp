@@ -83,9 +83,15 @@ gulp.task("cics-refresh", function (callback) {
 });
 
 gulp.task("copy-dbrm", function (callback) {
-  //var command = 'zowe file-master-plus copy data-set "' + config.devDBRMLIB + '" "' + config.testDBRMLIB + '" -m ' + config.testElement;
   var command =
-    'zowe zos-extended-files copy data-set "KWOYO01.MARBLES.DBRMLIB(DFH0XVDS)" "KWOYO01.MARBLES.T12M.DBRMLIB(DFH0XVDS)" --replace';
+    'zowe file-master-plus copy data-set "' +
+    config.devDBRMLIB +
+    '" "' +
+    config.testDBRMLIB +
+    '" -m ' +
+    config.testElement;
+  //var command =
+  //  'zowe zos-extended-files copy data-set "KWOYO01.MARBLES.DBRMLIB(DFH0XVDS)" "KWOYO01.MARBLES.T12M.DBRMLIB(DFH0XVDS)" --replace';
 
   simpleCommand(command, "command-archive/copy-dbrm", callback);
 });

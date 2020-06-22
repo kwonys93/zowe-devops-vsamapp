@@ -1,0 +1,20 @@
+{
+  // Use IntelliSense to learn about possible attributes.
+  // Hover to view descriptions of existing attributes.
+  // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "intertest-cics",
+      "request": "launch",
+      "name": "SR01BRS http",
+      "programName": "COBDEMO",
+      "interTestHost": "SR01BRS.lvn.broadcom.net",
+      "interTestPort": 6023,
+      "interTestUserName": "CUST029", //PWD CUST029
+      "interTestSecure": false,
+      "cicsApplId": "CICSTRN2", // transactionId: "DEMC"   // run trans via usildavp.lvn.broadcom.net, command ===> d SR01BRS, ENTER LOGON COMMAND ===> logon applid(cicstrn2)
+      "interTestCharset": "iso-8859-1"
+    }
+  ]
+}

@@ -43,7 +43,7 @@
       *   $D0= I07544 640 040910 HDIPCB  : EXAMPLE - BASE APPLICATION  *
       *                                                                *
       ******************************************************************
-       IDENTIFICATION DIVISION.
+       I
        PROGRAM-ID. VSAMAPP1.
        ENVIRONMENT DIVISION.
        CONFIGURATION SECTION.
