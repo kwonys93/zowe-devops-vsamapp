@@ -363,9 +363,10 @@
         CATALOG-INQUIRE-SINGLE-END.
            EXIT.
       *================================================================*
-      * Procedure to link to Datastore program to place order,         *
+      * Procedure  o link to Datastore program to place order,         *
       *   send request to dispatcher and notify stock manager          *
       *   an order has been placed                                     *
+      *================================================================*
       *================================================================*
         PLACE-ORDER.
            MOVE 'PLACE-ORDER' TO CA-RESPONSE-MESSAGE
