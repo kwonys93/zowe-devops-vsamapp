@@ -6,7 +6,7 @@
   "convert3JCL": "KWOYO01.MARBLES.JCL(#5HLS2JS)",
   "cicsConsole": "KWOYO01",
   "cicsPort": 6000,
-  "cicsProgram": "DFH0XVDS",
+  "cicsProgram": "VSAMAPP1",
   "cicsProtocol": "http",
   "cicsRegion": "CICS00A1",
   "cicsTran": "MB01",
@@ -28,7 +28,7 @@
   "fmpRejectUnauthorized": false,
   "marbleColor": "RED",
   "testDBRMLIB": "KWOYO01.MARBLES.DBRMLIB",
-  "testElement": "DFH0XVDS",
+  "testElement": "VSAMAPP1",
   "testLOADLIB": "CAAPJMF.CICS00.LOADLIB",
   "zosmfPort": 443,
   "zosmfRejectUnauthorized": false
