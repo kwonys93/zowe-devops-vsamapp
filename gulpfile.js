@@ -44,7 +44,9 @@ gulp.task("build-cobol", function (callback) {
 gulp.task("build-lnk", function (callback) {
   //  var command = "zowe endevor generate element " + config.testElement + " --type LNK --override-signout --maxrc 0 --stage-number 1";
   var command =
-    "zowe endevor generate element DFH0XVDS --env SMPLTEST --sn 1 --sys MARBLES --sub MARBLES --type LNK --override-signout --cb -i ENDEVOR --comment ysk3 --ccid ysk3";
+    "zowe endevor generate element " +
+    config.testElement +
+    " --env SMPLTEST --sn 1 --sys MARBLES --sub MARBLES --type LNK --override-signout --cb -i ENDEVOR --comment ysk3 --ccid ysk3";
   simpleCommand(command, "command-archive/build-lnk", callback);
 });
 
