@@ -1,50 +1,50 @@
        CBL CICS('COBOL3') APOST
-      ******************************************************************
-      *                                                                *
-      * MODULE NAME = DFH0XVDS                                         *
-      *                                                                *
-      * DESCRIPTIVE NAME = CICS TS  (Samples) Example Application -    *
-      *                                       VSAM Data Store          *
-      *                                                                *
-      *                                                                *
-      *                                                                *
-      *      Licensed Materials - Property of IBM                      *
-      *                                                                *
-      *      "Restricted Materials of IBM"                             *
-      *                                                                *
-      *      5655-Y04                                                  *
-      *                                                                *
-      *      (C) Copyright IBM Corp. 2004, 2008"                       *
-      *                                                                *
-      *                                                                *
-      *                                                                *
-      *                                                                *
-      * STATUS = 7.1.0                                                 *
-      *                                                                *
-      * TRANSACTION NAME = n/a                                         *
-      *                                                                *
-      * FUNCTION =                                                     *
-      *      This accesses the VSAM file for the example application   *
-      *      to perform reads and updates of the catalog               *
-      *                                                                *
-      *----------------------------------------------------------------*
-      *                                                                *
-      * ENTRY POINT = DFH0XVDS                                         *
-      *                                                                *
-      *----------------------------------------------------------------*
-      *                                                                *
-      * CHANGE ACTIVITY :                                              *
-      *                                                                *
-      *      $MOD(DFH0XVDS),COMP(SAMPLES),PROD(CICS TS ):              *
-      *                                                                *
-      *   PN= REASON REL YYMMDD HDXXIII : REMARKS                      *
-      *  $P0= D13727 640 050217 HDIPCB  : Minor fixes to the web servic*
-      *  $P1= D20555 660 080415 HDFFCMS : Typos in Web Service Example *
-      *   $D0= I07544 640 040910 HDIPCB  : EXAMPLE - BASE APPLICATION  *
-      *                                                                *
-      ******************************************************************
+      *****************************************************************
+      *                                                               *
+      *  MODULE NAME = DFH0XCMN                                       *
+      *                                                               *
+      *  DESCRIPTIVE NAME = CICS TS  (Samples) Example Application -  *
+      *                     Catalog Manager Program                   *
+      *                                                               *
+      *                                                               *
+      *                                                               *
+      *      Licensed Materials - Property of IBM                     *
+      *                                                               *
+      *      "Restricted Materials of IBM"                            *
+      *                                                               *
+      *      5655-Y04                                                 *
+      *                                                               *
+      *      (C) Copyright IBM Corp. 2004, 2005"                      *
+      *                                                               *
+      *                                                               *
+      *                                                               *
+      *                                                               *
+      *  STATUS = 7.1.0                                               *
+      *                                                               *
+      *  TRANSACTION NAME = n/a                                       *
+      *                                                               *
+      *  FUNCTION =                                                   *
+      *  This module is the controller for the Catalog application,   *
+      *  all requests pass through this module                        *
+      *                                                               *
+      *-------------------------------------------------------------  *
+      *                                                               *
+      *  ENTRY POINT = DFH0XCMN                                       *
+      *                                                               *
+      *-------------------------------------------------------------  *
+      *                                                               *
+      *  CHANGE ACTIVITY :                                            *
+      *                                                               *
+      *  $MOD(DFH0XCMN),COMP(PIPELINE),PROD(CICS TS ):                *
+      *                                                               *
+      *  PN= REASON REL YYMMDD HDXXIII : REMARKS                      *
+      * $D0= I07544 640 041126 HDIPCB  : ExampleApp: Outbound support *
+      * $P1= D13727 640 050217 HDIPCB  : Minor fixes to the web servic*
+      *  $D0= I07544 640 040910 HDIPCB  : EXAMPLE - BASE APPLICATION  *
+      *                                                               *
+      *****************************************************************
        IDENTIFICATION DIVISION.
-       PROGRAM-ID. DFH0XVDS.
+       PROGRAM-ID. DFH0XCMN.
        ENVIRONMENT DIVISION.
        CONFIGURATION SECTION.
        DATA DIVISION.
@@ -55,7 +55,7 @@
       * Run time (debug) infomation for this invocation
         01  WS-HEADER.
            03 WS-EYECATCHER            PIC X(16)
-                                        VALUE 'DFH0XVDS------WS'.
+                                        VALUE 'DFH0XCMN------WS'.
            03 WS-TRANSID               PIC X(4).
            03 WS-TERMID                PIC X(4).
            03 WS-TASKNUM               PIC 9(7).
@@ -77,42 +77,56 @@
            03 FILLER                   PIC X     VALUE SPACES.
            03 EM-DETAIL                PIC X(50) VALUE SPACES.
 
+      * Working variables
+       01 WORKING-VARIABLES.
+           03 WS-RETURN-CODE           PIC S9(8) COMP.
 
-      * Switches
-       01 SWITCHES.
-           03 CATALOG-EOF-SW           PIC X(1)  VALUE 'N'.
-               88 CATALOG-EOF                    VALUE 'Y'.
+      * Key into the configuration file
+       01 EXAMPLE-APP-CONFIG       PIC X(9)
+               VALUE 'EXMP-CONF'.
 
-      * Work fields
-       01 WORKFIELDS.
-           03 WS-CURRENT-ITEM-REF      PIC 9(4).
-           03 WS-RESPONSE-CODE         PIC S9(8) COMP.
-           03 WS-LOOP-COUNTER          PIC S9(2) COMP.
-           03 WS-RECORD-COUNT          PIC S9(2) COMP.
-           03 WS-RECORD-COUNT-DISPLAY  PIC +9(2) USAGE DISPLAY.
-           03 WS-CAT-ITEM.
-               05 WS-ITEM-REF          PIC 9(4).
-               05 WS-DESCRIPTION       PIC X(40).
-               05 WS-DEPARTMENT        PIC 9(3).
-               05 WS-COST              PIC ZZZ.99.
-               05 WS-IN-STOCK          PIC 9(4).
-               05 WS-ON-ORDER          PIC 9(3).
-               05 FILLER               PIC X(20).
+      * Format of the configuration file
+       01 APP-CONFIG.
+           03 FILE-KEY             PIC X(9).
+           03 FILLER               PIC X.
+           03 DATASTORE            PIC X(4).
+           03 FILLER               PIC X.
+           03 DO-OUTBOUND-WS       PIC X.
+           03 FILLER               PIC X.
+           03 CATMAN-PROG          PIC X(8).
+           03 FILLER               PIC X.
+           03 DSSTUB-PROG          PIC X(8).
+           03 FILLER               PIC X.
+           03 DSVSAM-PROG          PIC X(8).
+           03 FILLER               PIC X.
+           03 ODSTUB-PROG          PIC X(8).
+           03 FILLER               PIC X.
+           03 ODWEBS-PROG          PIC X(8).
+           03 FILLER               PIC X.
+           03 STKMAN-PROG          PIC X(8).
+           03 FILLER               PIC X.
+           03 OUTBOUND-URL         PIC X(255).
+           03 FILLER               PIC X(10).
 
-      * Configuration File Data
-       01 WS-CONF-FILE-KEY             PIC X(9) VALUE 'VSAM-NAME'.
-       01 WS-CONF-DATA.
-           03 FILLER                   PIC X(10).
-           03 WS-FILENAME-CONF         PIC X(8).
-           03 FILLER                   PIC X(62).
+      * Flag for Data Store program to call
+       01 WS-DATASTORE-INUSE-FLAG         PIC X(4).
+           88 DATASTORE-STUB                         VALUE 'STUB'.
+           88 DATASTORE-VSAM                         VALUE 'VSAM'.
 
-      * Constants
-       01 WS-FILENAME                  PIC X(8)  VALUE 'EXMPCAT '.
+      * Switch For OutBound WebService on Order Dispatch
+       01 WS-DISPATCHER-AS-WS-SWITCH       PIC X     VALUE 'N'.
+           88 WS-DO-DISPATCHER-AS-WS                 VALUE 'Y'.
 
-      * Debug
-       01 DEBUG-VARS.
-           03 DEBUG-Q                  PIC X(7) VALUE 'DEBUG-Q'.
-           03 DEBUG-STRING             PIC X(80).
+      * Program Names to LINK to
+       01 WS-PROGRAM-NAMES.
+           03  FILLER                      PIC X(8)  VALUE 'HHHHHHHH'.
+           03  WS-DATASTORE-PROG           PIC X(8).
+           03  WS-DISPATCH-PROG            PIC X(8).
+           03  WS-STOCKMANAGER-PROG        PIC X(8).
+
+      * Commarea structure for Order Dispatcher and Stock Manager Progs
+       01 WS-STOCK-COMMAREA.
+           COPY DFH0XCP2.
 
       *----------------------------------------------------------------*
 
@@ -131,14 +145,13 @@
       *----------------------------------------------------------------*
        MAINLINE SECTION.
 
-
-
       *----------------------------------------------------------------*
       * Common code                                                    *
       *----------------------------------------------------------------*
       * initialize working storage variables
-           INITIALIZE WS-HEADER.
-           INITIALIZE WORKFIELDS.
+           INITIALIZE APP-CONFIG.
+           INITIALIZE WS-PROGRAM-NAMES.
+           INITIALIZE ERROR-MSG.
 
       * set up general variable
            MOVE EIBTRNID TO WS-TRANSID.
@@ -155,19 +168,53 @@
                EXEC CICS ABEND ABCODE('EXCA') NODUMP END-EXEC
            END-IF
 
-      * initalize commarea return code to zero
+      * Initalize commarea return code to zero
            MOVE '00' TO CA-RETURN-CODE
            MOVE EIBCALEN TO WS-CALEN.
 
       *----------------------------------------------------------------*
-      * Read in VSAM file name from config file
+      * Read in configuration file and set up program names
       *----------------------------------------------------------------*
            EXEC CICS READ FILE('EXMPCONF')
-                          INTO(WS-CONF-DATA)
-                          RIDFLD(WS-CONF-FILE-KEY)
+                          INTO(APP-CONFIG)
+                          RIDFLD(EXAMPLE-APP-CONFIG)
+                          RESP(WS-RETURN-CODE)
            END-EXEC
 
-           MOVE WS-FILENAME-CONF TO WS-FILENAME
+           IF WS-RETURN-CODE NOT EQUAL DFHRESP(NORMAL)
+               MOVE '51' TO CA-RETURN-CODE
+               MOVE 'APPLICATION ERROR OPENING CONFIGURATION FILE'
+                   TO CA-RESPONSE-MESSAGE
+               EXEC CICS RETURN END-EXEC
+           END-IF
+
+           MOVE DATASTORE TO WS-DATASTORE-INUSE-FLAG
+
+           EVALUATE DATASTORE
+               WHEN 'STUB'
+                   MOVE DSSTUB-PROG TO WS-DATASTORE-PROG
+               WHEN 'VSAM'
+                   MOVE DSVSAM-PROG TO WS-DATASTORE-PROG
+               WHEN OTHER
+                   MOVE '52' TO CA-RETURN-CODE
+                   MOVE 'DATASTORE TYPE INCORRECT IN CONFIGURATION FILE'
+                       TO CA-RESPONSE-MESSAGE
+                   EXEC CICS RETURN END-EXEC
+           END-EVALUATE
+
+           EVALUATE DO-OUTBOUND-WS
+               WHEN 'Y'
+                   MOVE ODWEBS-PROG TO WS-DISPATCH-PROG
+               WHEN 'N'
+                   MOVE ODSTUB-PROG TO WS-DISPATCH-PROG
+               WHEN OTHER
+                   MOVE '53' TO CA-RETURN-CODE
+                   MOVE 'DISPATCHER SWITCH INCORRECT IN CONFIG FILE'
+                       TO CA-RESPONSE-MESSAGE
+                   EXEC CICS RETURN END-EXEC
+           END-EVALUATE
+
+           MOVE STKMAN-PROG TO WS-STOCKMANAGER-PROG
 
       *----------------------------------------------------------------*
       * Check which operation in being requested
@@ -177,12 +224,12 @@
 
            EVALUATE CA-REQUEST-ID
                WHEN '01INQC'
-      *        Call routine to read catalog for inquire
+      *        Call routine to perform for inquire
                    PERFORM CATALOG-INQUIRE
 
                WHEN '01INQS'
       *        Call routine to perform for inquire for single item
-                 PERFORM CATALOG-INQUIRE-SINGLE
+                   PERFORM CATALOG-INQUIRE
 
                WHEN '01ORDR'
       *        Call routine to place order
@@ -222,224 +269,54 @@
                      LENGTH(LENGTH OF ERROR-MSG)
            END-EXEC.
            EXIT.
+
       *================================================================*
       * Procedure to link to Datastore program to inquire              *
       *   on the catalog data                                          *
       *================================================================*
         CATALOG-INQUIRE.
-
-
-           INITIALIZE CA-INQUIRY-RESPONSE-DATA
-      * Following 6 lines added by PM46914                    @PM46914A
-           PERFORM
-               WITH TEST AFTER
-               VARYING  WS-LOOP-COUNTER FROM 1 BY 1
-               UNTIL WS-LOOP-COUNTER EQUAL 15
-              INITIALIZE CA-CAT-ITEM(WS-LOOP-COUNTER)
-           END-PERFORM
-
-           MOVE 'EXDSVSAM: CATALOG-INQUIRE' TO CA-RESPONSE-MESSAGE
-
-           MOVE CA-LIST-START-REF TO WS-CURRENT-ITEM-REF
-
-      * Start browse of file
-           EXEC CICS STARTBR FILE(WS-FILENAME)
-                             RIDFLD(WS-CURRENT-ITEM-REF)
-                             RESP(WS-RESPONSE-CODE)
+           MOVE 'EXCATMAN: CATALOG-INQUIRE' TO CA-RESPONSE-MESSAGE
+           EXEC CICS LINK   PROGRAM(WS-DATASTORE-PROG)
+                            COMMAREA(DFHCOMMAREA)
            END-EXEC
-
-           IF WS-RESPONSE-CODE EQUAL DFHRESP(NOTFND)
-      *    Item not found
-               MOVE 20 TO CA-RETURN-CODE
-               MOVE 'ITEM NOT FOUND' TO CA-RESPONSE-MESSAGE
-               EXEC CICS RETURN END-EXEC
-           ELSE
-               IF WS-RESPONSE-CODE NOT EQUAL DFHRESP(NORMAL)
-                   MOVE 21 TO CA-RETURN-CODE
-                   STRING  'ERROR OPENING FILE ' WS-FILENAME
-                                               DELIMITED BY SIZE
-                           INTO CA-RESPONSE-MESSAGE
-                   END-STRING
-                   EXEC CICS RETURN END-EXEC
-               END-IF
-           END-IF
-
-
-      * Loop thru file read in records until EOF or 15 records read
-           PERFORM
-               WITH TEST AFTER
-               VARYING  WS-LOOP-COUNTER FROM 1 BY 1
-               UNTIL CATALOG-EOF
-                  OR WS-LOOP-COUNTER EQUAL 15
-
-               EXEC CICS READNEXT FILE(WS-FILENAME)
-                                  INTO(WS-CAT-ITEM)
-                                  RIDFLD(WS-CURRENT-ITEM-REF)
-                                  LENGTH(LENGTH OF WS-CAT-ITEM)
-                                  RESP(WS-RESPONSE-CODE)
-               END-EXEC
-
-               EVALUATE WS-RESPONSE-CODE
-                   WHEN DFHRESP(NORMAL)
-                       MOVE WS-LOOP-COUNTER TO WS-RECORD-COUNT
-
-                       MOVE WS-CAT-ITEM TO CA-CAT-ITEM(WS-LOOP-COUNTER)
-
-                       MOVE WS-RECORD-COUNT TO CA-ITEM-COUNT
-                       MOVE WS-CURRENT-ITEM-REF TO CA-LAST-ITEM-REF
-
-                   WHEN DFHRESP(ENDFILE)
-                       MOVE 'Y' TO CATALOG-EOF-SW
-                   WHEN OTHER
-                       MOVE 21 TO CA-RETURN-CODE
-                       MOVE 'ERROR OCCURED READING FILE'
-                         TO CA-RESPONSE-MESSAGE
-                       EXEC CICS RETURN END-EXEC
-               END-EVALUATE
-           END-PERFORM
-
-           MOVE SPACES TO CA-RESPONSE-MESSAGE
-           MOVE WS-RECORD-COUNT TO WS-RECORD-COUNT-DISPLAY
-           STRING WS-RECORD-COUNT-DISPLAY
-                  ' ITEMS RETURNED'
-                       DELIMITED BY SIZE
-               INTO CA-RESPONSE-MESSAGE
-           END-STRING
-
-      * End browse of file
-           EXEC CICS ENDBR FILE(WS-FILENAME)
-                           RESP(WS-RESPONSE-CODE)
-           END-EXEC
-           IF WS-RESPONSE-CODE NOT EQUAL DFHRESP(NORMAL)
-               MOVE 21 TO CA-RETURN-CODE
-               MOVE 'ERROR ENDING BROWSE SESSION' TO CA-RESPONSE-MESSAGE
-               EXEC CICS RETURN END-EXEC
-           END-IF
            EXIT.
-        CATALOG-INQUIRE-END.
-           EXIT.
+
       *================================================================*
-      * Procedure to link to Datastore program to inquire for a single *
-      *   item from the catalog data                                   *
-      *================================================================*
-        CATALOG-INQUIRE-SINGLE.
-
-           EXEC CICS READ FILE(WS-FILENAME)
-                          INTO(WS-CAT-ITEM)
-                          RIDFLD(CA-ITEM-REF-REQ)
-                          RESP(WS-RESPONSE-CODE)
-           END-EXEC
-
-           IF WS-RESPONSE-CODE = DFHRESP(NOTFND)
-      *    Item not found
-               MOVE 20 TO CA-RETURN-CODE
-               MOVE 'ITEM NOT FOUND' TO CA-RESPONSE-MESSAGE
-               EXEC CICS RETURN END-EXEC
-           ELSE
-               IF WS-RESPONSE-CODE NOT EQUAL DFHRESP(NORMAL)
-                   MOVE 21 TO CA-RETURN-CODE
-                   STRING  'ERROR OPENING FILE ' WS-FILENAME
-                       DELIMITED BY SIZE
-                       INTO CA-RESPONSE-MESSAGE
-                   END-STRING
-                   EXEC CICS RETURN END-EXEC
-               END-IF
-           END-IF
-
-      *    Populate commarea to return single item
-
-           MOVE WS-CAT-ITEM TO CA-SINGLE-ITEM
-
-           MOVE SPACES TO CA-RESPONSE-MESSAGE
-           STRING 'RETURNED ITEM: REF ='
-                  CA-ITEM-REF-REQ
-               DELIMITED BY SIZE
-               INTO CA-RESPONSE-MESSAGE
-           END-STRING
-
-
-           EXIT.
-        CATALOG-INQUIRE-SINGLE-END.
-           EXIT.
-      *================================================================*
-      * Procedure  o link to Datastore program to place order,         *
+      * Procedure to link to Datastore program to place order,         *
       *   send request to dispatcher and notify stock manager          *
       *   an order has been placed                                     *
       *================================================================*
-      *================================================================*
         PLACE-ORDER.
-           MOVE 'PLACE-ORDER' TO CA-RESPONSE-MESSAGE
-
-      * Check validity of order quantity
-           IF CA-QUANTITY-REQ IS NOT GREATER THAN 0
-               MOVE 98 TO CA-RETURN-CODE
-               MOVE 'ORDER QUANTITY MUST BE POSITIVE'
-                    TO CA-RESPONSE-MESSAGE
-               EXEC CICS RETURN END-EXEC
-           END-IF
-
-      * Read file for update
-           EXEC CICS READ FILE(WS-FILENAME)
-                          UPDATE
-                          INTO(WS-CAT-ITEM)
-                          RIDFLD(CA-ITEM-REF-NUMBER)
-                          RESP(WS-RESPONSE-CODE)
+           MOVE 'EXCATMAN: PLACE-ORDER' TO CA-RESPONSE-MESSAGE
+           EXEC CICS LINK PROGRAM(WS-DATASTORE-PROG)
+                          COMMAREA(DFHCOMMAREA)
            END-EXEC
 
-           EVALUATE WS-RESPONSE-CODE
-      *        Normal Response
-               WHEN DFHRESP(NORMAL)
-                   PERFORM UPDATE-FILE
-      *        Error Conditions
-               WHEN DFHRESP(NOTFND)
-                   MOVE 20 TO CA-RETURN-CODE
+           IF CA-RETURN-CODE EQUAL 00
+      * Link to the Order dispatch program with details
+      *        Set up commarea for request
+               INITIALIZE WS-STOCK-COMMAREA
+               MOVE '01DSPO' TO CA-ORD-REQUEST-ID
+               MOVE CA-USERID TO CA-ORD-USERID
+               MOVE CA-CHARGE-DEPT TO CA-ORD-CHARGE-DEPT
+               MOVE CA-ITEM-REF-NUMBER TO CA-ORD-ITEM-REF-NUMBER
+               MOVE CA-QUANTITY-REQ TO CA-ORD-QUANTITY-REQ
+               EXEC CICS LINK PROGRAM (WS-DISPATCH-PROG)
+                              COMMAREA(WS-STOCK-COMMAREA)
+               END-EXEC
+
+               IF CA-ORD-RETURN-CODE NOT EQUAL ZERO
                    MOVE SPACES TO CA-RESPONSE-MESSAGE
-                   STRING  'ITEM - '
-                           CA-ITEM-REF-NUMBER
-                           ' NOT FOUND'
-                       DELIMITED BY SIZE
-                       INTO CA-RESPONSE-MESSAGE
-                   END-STRING
-                   EXEC CICS RETURN END-EXEC
-               WHEN NOT DFHRESP(NORMAL)
-                   MOVE 21 TO CA-RETURN-CODE
-                   MOVE 'ERROR OCCURED READING FILE'
-                        TO CA-RESPONSE-MESSAGE
-                   EXEC CICS RETURN END-EXEC
-           END-EVALUATE
-           EXIT.
-        PLACE-ORDER-END.
-           EXIT.
+                   MOVE CA-ORD-RESPONSE-MESSAGE
+                         TO CA-RESPONSE-MESSAGE
+               END-IF
 
-        UPDATE-FILE.
-      *    Check there is enough stock to satisfy order
-           IF CA-QUANTITY-REQ IS GREATER THAN WS-IN-STOCK
-               MOVE 97 TO CA-RETURN-CODE
-               MOVE 'INSUFFICENT STOCK TO COMPLETE ORDER'
-                    TO CA-RESPONSE-MESSAGE
-      *        Unlock file
-               EXEC CICS UNLOCK file(WS-FILENAME)END-EXEC
-               EXEC CICS RETURN END-EXEC
+      * Notify the stock manager program of the order details
+               MOVE '01STKO' TO CA-ORD-REQUEST-ID
+               EXEC CICS LINK PROGRAM (WS-STOCKMANAGER-PROG)
+                              COMMAREA(WS-STOCK-COMMAREA)
+               END-EXEC
            END-IF
-      *    Update quantity on file
-           SUBTRACT CA-QUANTITY-REQ FROM WS-IN-STOCK
-           EXEC CICS REWRITE FILE(WS-FILENAME)
-                             FROM(WS-CAT-ITEM)
-                             RESP(WS-RESPONSE-CODE)
-           END-EXEC
-
-           EVALUATE WS-RESPONSE-CODE
-               WHEN DFHRESP(NORMAL)
-      *                                                            $P1C
-                   MOVE 'ORDER SUCCESSFULLY PLACED'
-                        TO CA-RESPONSE-MESSAGE
-               WHEN OTHER
-                   MOVE 22 TO CA-RETURN-CODE
-                   MOVE 'ERROR UPDATING FILE' TO CA-RESPONSE-MESSAGE
-                   EXEC CICS RETURN END-EXEC
-           END-EVALUATE
-           EXIT.
-        UPDATE-FILE-END.
            EXIT.
 
       *================================================================*
@@ -447,11 +324,11 @@
       *================================================================*
         REQUEST-NOT-RECOGNISED.
            MOVE '99' TO CA-RETURN-CODE
-           MOVE CA-REQUEST-ID TO EM-REQUEST-ID
-           MOVE ' UNKNOWN REQUEST ID RECEIVED - ' TO EM-DETAIL
-           MOVE CA-REQUEST-ID TO EM-DETAIL(31:6)
+
+           STRING ' UNKNOWN REQUEST ID RECEIVED - ' CA-REQUEST-ID
+               DELIMITED BY SIZE
+               INTO EM-DETAIL
+           END-STRING
+
            MOVE 'OPERATION UNKNOWN' TO CA-RESPONSE-MESSAGE
-           PERFORM WRITE-ERROR-MESSAGE
-           EXIT.
-        REQUEST-NOT-RECOGNISED-END.
            EXIT.
