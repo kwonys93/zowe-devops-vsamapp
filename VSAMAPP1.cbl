@@ -172,7 +172,6 @@
       *----------------------------------------------------------------*
       * Check which operation in being requested
       *----------------------------------------------------------------*
-      *----------------------------------------------------------------*
       * Uppercase the value passed in the Request Id field
            MOVE FUNCTION UPPER-CASE(CA-REQUEST-ID) TO CA-REQUEST-ID
 
