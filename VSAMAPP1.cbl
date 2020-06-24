@@ -178,7 +178,7 @@
            EVALUATE CA-REQUEST-ID
                WHEN '01INQC'
       *        Call routine to read catalog for inquire
-                   PERFORM CATALOG-INQUIRE
+      *             PERFORM CATALOG-INQUIRE
 
                WHEN '01INQS'
       *        Call routine to perform for inquire for single item
