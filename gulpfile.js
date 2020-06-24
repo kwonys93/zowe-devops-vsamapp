@@ -19,7 +19,9 @@ gulp.task("update-cobol", function (callback) {
   var command =
     "zowe  endevor update element " +
     config.testElement +
-    " --env SMPLTEST --sys MARBLES --sub MARBLES --typ COBOL --override-signout --ff DFH0XVDS.cbl -i ENDEVOR --comment ysk1 --ccid ysk1";
+    " --env SMPLTEST --sys MARBLES --sub MARBLES --typ COBOL --override-signout --ff " +
+    config.testElement +
+    " -i ENDEVOR --comment ysk1 --ccid ysk1";
 
   simpleCommand(command, "command-archive/update-cobol", callback);
 });
