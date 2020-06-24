@@ -21,7 +21,7 @@ gulp.task("update-cobol", function (callback) {
     config.testElement +
     " --env SMPLTEST --sys MARBLES --sub MARBLES --typ COBOL --override-signout --ff " +
     config.testElement +
-    " -i ENDEVOR --comment ysk1 --ccid ysk1";
+    ".cbl -i ENDEVOR --comment ysk1 --ccid ysk1";
 
   simpleCommand(command, "command-archive/update-cobol", callback);
 });

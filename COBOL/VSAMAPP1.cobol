@@ -44,7 +44,7 @@
       *                                                                *        
       ******************************************************************        
        IDENTIFICATION DIVISION.                                                 
-       PROGRAM-ID. VSAMAPP1.                                                    
+       PROGRAM-ID. DFH0XVDS.                                                    
        ENVIRONMENT DIVISION.                                                    
        CONFIGURATION SECTION.                                                   
        DATA DIVISION.                                                           
@@ -172,6 +172,7 @@
       *----------------------------------------------------------------*        
       * Check which operation in being requested                                
       *----------------------------------------------------------------*        
+      *----------------------------------------------------------------*        
       * Uppercase the value passed in the Request Id field                      
            MOVE FUNCTION UPPER-CASE(CA-REQUEST-ID) TO CA-REQUEST-ID             
                                                                                 
@@ -182,7 +183,7 @@
                                                                                 
                WHEN '01INQS'                                                    
       *        Call routine to perform for inquire for single item              
-                   PERFORM CATALOG-INQUIRE-SINGLE                               
+      *           PERFORM CATALOG-INQUIRE-SINGLE                                
                                                                                 
                WHEN '01ORDR'                                                    
       *        Call routine to place order                                      
@@ -362,9 +363,10 @@
         CATALOG-INQUIRE-SINGLE-END.                                             
            EXIT.                                                                
       *================================================================*        
-      * Procedure to link to Datastore program to place order,         *        
+      * Procedure  o link to Datastore program to place order,         *        
       *   send request to dispatcher and notify stock manager          *        
       *   an order has been placed                                     *        
+      *================================================================*        
       *================================================================*        
         PLACE-ORDER.                                                            
            MOVE 'PLACE-ORDER' TO CA-RESPONSE-MESSAGE                            
